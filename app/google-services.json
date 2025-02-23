@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851371404453",
+    "project_id": "proyectopropio-fd31a",
+    "storage_bucket": "proyectopropio-fd31a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851371404453:android:7e5f18e913091e5cb1314c",
+        "android_client_info": {
+          "package_name": "com.example.proyectopropio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO6PA-8xFIgDdZR0g6hfgyav2MTjZQXsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
