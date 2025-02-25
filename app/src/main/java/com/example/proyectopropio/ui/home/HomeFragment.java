@@ -3,7 +3,6 @@ package com.example.proyectopropio.ui.home;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.proyectopropio.databinding.FragmentHomeBinding;
-
+import com.example.proyectopropio.ui.Incidencia;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeFragment extends Fragment {
-
     private FragmentHomeBinding binding;
+    private FirebaseUser authUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -26,31 +28,54 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        HomeViewModel homeViewModel1 = new ViewModelProvider(getActivity()).get(HomeViewModel.class);
+        HomeViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         HomeViewModel.getCurrentAddress().observe(getViewLifecycleOwner(), address -> {
-            binding.localitzacio.setText(String.format(
+            binding.txtDireccio.setText(String.format(
                     "Direcció: %1$s \n Hora: %2$tr",
-                    address, System.currentTimeMillis()));
+                    address, System.currentTimeMillis())
+            );
+        });
+        sharedViewModel.getCurrentLatLng().observe(getViewLifecycleOwner(), latlng -> {
+            binding.txtLatitud.setText(String.valueOf(latlng.latitude));
+            binding.txtLongitud.setText(String.valueOf(latlng.longitude));
         });
 
-        homeViewModel1.getButtonText().observe(getViewLifecycleOwner(), s -> binding.buttonLocation.setText(s));
-        homeViewModel1.getProgressBar().observe(getViewLifecycleOwner(), visible ->{
+        sharedViewModel.getProgressBar().observe(getViewLifecycleOwner(), visible -> {
             if (visible)
-                binding.localitzacio.setVisibility(ProgressBar.VISIBLE);
+                binding.loading.setVisibility(ProgressBar.VISIBLE);
             else
-                binding.localitzacio.setVisibility(ProgressBar.INVISIBLE);
+                binding.loading.setVisibility(ProgressBar.INVISIBLE);
         });
 
-        binding.buttonLocation.setOnClickListener(view -> {
-            Log.d("DEBUG", "Has clicado el boton");
-            homeViewModel1.switchTrackingLocation();
+        sharedViewModel.switchTrackingLocation();
+
+        sharedViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
+            authUser = user;
         });
 
+        //...
+
+        binding.buttonNotificar.setOnClickListener(button -> {
+            Incidencia incidencia = new Incidencia();
+            incidencia.setDireccio(binding.txtDireccio.getText().toString());
+            incidencia.setLatitud(binding.txtLatitud.getText().toString());
+            incidencia.setLongitud(binding.txtLongitud.getText().toString());
+            incidencia.setProblema(binding.txtDescripcio.getText().toString());
+
+            DatabaseReference base = FirebaseDatabase.getInstance().getReference();
+
+            DatabaseReference users = base.child("users");
+            DatabaseReference uid = users.child(authUser.getUid());
+            DatabaseReference incidencies = uid.child("incidencies");
+
+            DatabaseReference reference = incidencies.push();
+            reference.setValue(incidencia);
+        });
+
+//...
 
         return root;
-
-
     }
 
     @Override

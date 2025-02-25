@@ -23,6 +23,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,7 +41,7 @@ public class HomeViewModel extends AndroidViewModel {
     private final MutableLiveData<String> checkPermission = new MutableLiveData<>();
     private final MutableLiveData<String> buttonText = new MutableLiveData<>();
     private final MutableLiveData<Boolean> progressBar = new MutableLiveData<>();
-
+    private final MutableLiveData<LatLng> currentLatLng = new MutableLiveData<>();
 
     private boolean mTrackingLocation;
     FusedLocationProviderClient mFusedLocationCLient;
@@ -69,6 +70,9 @@ public class HomeViewModel extends AndroidViewModel {
 
     public LiveData<String> getCheckPermission() {
         return checkPermission;
+    }
+    public MutableLiveData<LatLng> getCurrentLatLng() {
+        return currentLatLng;
     }
 
     private LocationCallback mLocationCallback = new LocationCallback() {
@@ -140,6 +144,8 @@ public class HomeViewModel extends AndroidViewModel {
                         // En aquest cas, sols volem una única adreça:
                         1);
 
+                LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+                currentLatLng.postValue(latlng);
 
                 if (addresses == null || addresses.size() == 0) {
                     if (resultMessage.isEmpty()) {

@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize the sign-in launcher for Firebase Auth
         signInLauncher = registerForActivityResult(
                 new FirebaseAuthUIActivityResultContract(),
                 result -> {
