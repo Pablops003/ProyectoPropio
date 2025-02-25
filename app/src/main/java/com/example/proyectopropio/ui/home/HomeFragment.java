@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
                 binding.localitzacio.setVisibility(ProgressBar.VISIBLE);
             else
                 binding.localitzacio.setVisibility(ProgressBar.INVISIBLE);
-            });
+        });
 
         binding.buttonLocation.setOnClickListener(view -> {
             Log.d("DEBUG", "Has clicado el boton");

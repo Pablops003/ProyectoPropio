@@ -132,7 +132,6 @@ public class HomeViewModel extends AndroidViewModel {
         Geocoder geocoder = new Geocoder(application.getApplicationContext(), Locale.getDefault());
 
         executor.execute(() -> {
-            // Aquest codi s'executa en segon pla
             List<Address> addresses = null;
             String resultMessage = "";
 
@@ -186,5 +185,4 @@ public class HomeViewModel extends AndroidViewModel {
 
 
 
-    }
-
+}
