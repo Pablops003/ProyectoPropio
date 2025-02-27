@@ -41,7 +41,7 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Configuración del mapa
+        // configuracionn del mapa
         Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
@@ -97,13 +97,17 @@ public class NotificationsFragment extends Fragment {
                 if (incidencia != null) {
                     GeoPoint location = new GeoPoint(latitud, longitud);
 
+                    // Calcular distancia y tiempo
                     double distancia = calcularDistancia(vall, location);
+                    double tiempoEstimado = calcularTiempo(distancia); // Tiempo en minutos
 
+                    // Crear y agregar el marcador
                     Marker marker = new Marker(binding.map);
                     marker.setPosition(location);
-                    marker.setTitle(incidencia.getProblema() + "\n" + String.format("%.2f", distancia) + " metros");
+                    marker.setTitle(incidencia.getProblema() + "\n" +
+                            String.format("%.2f", distancia) + " metros\n" +
+                            String.format("%.2f", tiempoEstimado) + " minutos");
 
-                    // Agregar el marcador al mapa
                     binding.map.getOverlays().add(marker);
                 }
             }
@@ -130,6 +134,22 @@ public class NotificationsFragment extends Fragment {
             return punto1.distanceToAsDouble(punto2); // Retorna la distancia en metros
         }
         return -1;
+    }
+
+    // Método para calcular el tiempo de viaje
+    private double calcularTiempo(double distancia) {
+        double velocidad = 50; // Velocidad en km/h
+        double velocidadEnMetrosPorSegundo = velocidad * 1000 / 3600; // Convertimos km/h a m/s
+
+        // Y los 3600 son los segundo que hay en una hora y mil son los metros que hay en un km
+
+        // Calcular el tiempo en segundos
+        double tiempoEnSegundos = distancia / velocidadEnMetrosPorSegundo;
+
+        // Convertimos el tiempo a minutos
+        double tiempoEnMinutos = tiempoEnSegundos / 60;
+
+        return tiempoEnMinutos;
     }
 
     @Override
