@@ -1,24 +1,36 @@
 package com.example.proyectopropio.ui;
-
 public class Incidencia {
-    String latitud;
-    String longitud;
+    Double latitud;
+    Double longitud;
     String direccio;
     String problema;
+    String url;
 
-    public String getLatitud() {
+    public Incidencia(Double latitud, Double longitud, String direccio,
+                      String problema, String url) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.direccio = direccio;
+        this.problema = problema;
+        this.url = url;
+    }
+
+    public Incidencia() {
+    }
+
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 
@@ -38,13 +50,11 @@ public class Incidencia {
         this.problema = problema;
     }
 
-    public Incidencia(String latitud, String longitud, String direccio, String problema) {
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.direccio = direccio;
-        this.problema = problema;
+    public String getUrl() {
+        return url;
     }
 
-    public Incidencia() {
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

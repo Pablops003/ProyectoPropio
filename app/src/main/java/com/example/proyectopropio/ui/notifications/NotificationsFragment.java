@@ -3,6 +3,7 @@ package com.example.proyectopropio.ui.notifications;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.proyectopropio.R;
 import com.example.proyectopropio.databinding.FragmentNotificationsBinding;
 import com.example.proyectopropio.ui.Incidencia;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,16 +37,15 @@ public class NotificationsFragment extends Fragment {
     private FirebaseAuth auth;
     private DatabaseReference incidencias;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Configuración de OpenStreetMap
         Context ctx = requireActivity().getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        // Configurar el mapa
         binding.map.setTileSource(TileSourceFactory.MAPNIK);
         binding.map.setMultiTouchControls(true);
         IMapController mapController = binding.map.getController();
@@ -56,41 +57,45 @@ public class NotificationsFragment extends Fragment {
 
         Marker startMarker = new Marker(binding.map);
         startMarker.setPosition(vall);
-        startMarker.setTitle("vall");
+        startMarker.setTitle("la vall");
+        startMarker.setIcon(requireContext().getDrawable(R.drawable.ic_home_black_24dp));
         binding.map.getOverlays().add(startMarker);
 
-        // Mostrar ubicación del usuario
+
         MyLocationNewOverlay myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(requireContext()), binding.map);
         myLocationOverlay.enableMyLocation();
         binding.map.getOverlays().add(myLocationOverlay);
 
-        // Agregar brújula
         CompassOverlay compassOverlay = new CompassOverlay(requireContext(), binding.map);
         compassOverlay.enableCompass();
         binding.map.getOverlays().add(compassOverlay);
 
-        // Conectar a Firebase
         auth = FirebaseAuth.getInstance();
-        DatabaseReference base = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference base = FirebaseDatabase.getInstance("https://proyectopropio-fd31a-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         DatabaseReference users = base.child("users");
         DatabaseReference uid = users.child(auth.getUid());
-        incidencias = uid.child("incidencias");
+        incidencias = uid.child("incidencies");
 
-        // Cargar marcadores de Firebase
+        Log.d("III", incidencias.toString());
+
         incidencias.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName) {
+                if (binding == null || binding.map == null) {
+                    Log.e("Pablo", " no está visible.");
+                    return;
+                }
                 Incidencia incidencia = snapshot.getValue(Incidencia.class);
+                Double latitud = snapshot.child("latitud").getValue(Double.class);
+                Double longitud = snapshot.child("longitud").getValue(Double.class);
+                Log.d("O", latitud + " " + longitud);
+
                 if (incidencia != null) {
-                    GeoPoint location = new GeoPoint(
-                            Double.parseDouble(incidencia.getLatitud()),
-                            Double.parseDouble(incidencia.getLongitud())
-                    );
+                    GeoPoint location = new GeoPoint(latitud, longitud);
 
                     Marker marker = new Marker(binding.map);
                     marker.setPosition(location);
                     marker.setTitle(incidencia.getProblema());
-                    marker.setSnippet(incidencia.getDireccio());
 
                     binding.map.getOverlays().add(marker);
                 }
@@ -127,6 +132,8 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        binding =null;
 }
+
+
 }
