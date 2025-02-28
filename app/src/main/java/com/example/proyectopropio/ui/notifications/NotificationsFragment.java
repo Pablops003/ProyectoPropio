@@ -107,6 +107,7 @@ public class NotificationsFragment extends Fragment {
                     marker.setTitle(club.getProblema() + "\n" +
                             String.format("%.2f", distancia) + " metros\n" +
                             String.format("%.2f", tiempoEstimado) + " minutos");
+                    marker.setSubDescription(club.getCarles());
 
                     binding.map.getOverlays().add(marker);
                 }

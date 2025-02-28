@@ -77,6 +77,8 @@ public class HomeFragment extends Fragment {
             double latitud = Double.parseDouble(binding.txtLatitud.getText().toString().trim());
             double longitud = Double.parseDouble(binding.txtLongitud.getText().toString().trim());
             club.setProblema(binding.txtDescripcio.getText().toString());
+            club.setCarles("hola carles");
+
 
             club.setLatitud(latitud);
             club.setLongitud(longitud);

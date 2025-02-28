@@ -5,14 +5,16 @@ public class Club {
     String direccio;
     String problema;
     String url;
+    String Carles;
 
     public Club(Double latitud, Double longitud, String direccio,
-                String problema, String url) {
+                String problema, String url, String Carles) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.direccio = direccio;
         this.problema = problema;
         this.url = url;
+        this.Carles= Carles;
     }
 
     public Club() {
@@ -56,5 +58,13 @@ public class Club {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCarles() {
+        return Carles;
+    }
+
+    public void setCarles(String carles) {
+        this.Carles =carles;
     }
 }
