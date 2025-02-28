@@ -1,13 +1,13 @@
 package com.example.proyectopropio.ui;
-public class Incidencia {
+public class Club {
     Double latitud;
     Double longitud;
     String direccio;
     String problema;
     String url;
 
-    public Incidencia(Double latitud, Double longitud, String direccio,
-                      String problema, String url) {
+    public Club(Double latitud, Double longitud, String direccio,
+                String problema, String url) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.direccio = direccio;
@@ -15,7 +15,7 @@ public class Incidencia {
         this.url = url;
     }
 
-    public Incidencia() {
+    public Club() {
     }
 
     public double getLatitud() {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectopropio.databinding.FragmentDashboardBinding;
 import com.example.proyectopropio.databinding.RvIncidenciesBinding;
-import com.example.proyectopropio.ui.Incidencia;
+import com.example.proyectopropio.ui.Club;
 import com.example.proyectopropio.ui.home.HomeViewModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -46,8 +45,8 @@ public class DashboardFragment extends Fragment {
                 DatabaseReference uid = users.child(authUser.getUid());
                 DatabaseReference incidencies = uid.child("incidencies");
 
-                FirebaseRecyclerOptions<Incidencia> options = new FirebaseRecyclerOptions.Builder<Incidencia>()
-                        .setQuery(incidencies, Incidencia.class)
+                FirebaseRecyclerOptions<Club> options = new FirebaseRecyclerOptions.Builder<Club>()
+                        .setQuery(incidencies, Club.class)
                         .setLifecycleOwner(this)
                         .build();
 
@@ -71,14 +70,14 @@ public class DashboardFragment extends Fragment {
         binding = null;
     }
 
-    class IncidenciaAdapter extends FirebaseRecyclerAdapter<Incidencia, IncidenciaAdapter.IncidenciaViewholder> {
-        public IncidenciaAdapter(@NonNull FirebaseRecyclerOptions<Incidencia> options) {
+    class IncidenciaAdapter extends FirebaseRecyclerAdapter<Club, IncidenciaAdapter.IncidenciaViewholder> {
+        public IncidenciaAdapter(@NonNull FirebaseRecyclerOptions<Club> options) {
             super(options);
         }
 
         @Override
         protected void onBindViewHolder(
-        @NonNull IncidenciaViewholder holder, int position, @NonNull Incidencia model
+        @NonNull IncidenciaViewholder holder, int position, @NonNull Club model
             ) {
             holder.binding.txtDescripcio.setText(model.getProblema());
             holder.binding.txtAdreca.setText(model.getDireccio());

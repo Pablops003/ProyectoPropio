@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import com.bumptech.glide.Glide;
 
 import com.example.proyectopropio.R;
 import com.example.proyectopropio.databinding.FragmentHomeBinding;
-import com.example.proyectopropio.ui.Incidencia;
+import com.example.proyectopropio.ui.Club;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -73,14 +72,14 @@ public class HomeFragment extends Fragment {
 
 
         binding.buttonNotificar.setOnClickListener(button -> {
-            Incidencia incidencia = new Incidencia();
-            incidencia.setDireccio(binding.txtDireccio.getText().toString());
+            Club club = new Club();
+            club.setDireccio(binding.txtDireccio.getText().toString());
             double latitud = Double.parseDouble(binding.txtLatitud.getText().toString().trim());
             double longitud = Double.parseDouble(binding.txtLongitud.getText().toString().trim());
-            incidencia.setProblema(binding.txtDescripcio.getText().toString());
+            club.setProblema(binding.txtDescripcio.getText().toString());
 
-            incidencia.setLatitud(latitud);
-            incidencia.setLongitud(longitud);
+            club.setLatitud(latitud);
+            club.setLongitud(longitud);
 
             DatabaseReference base = FirebaseDatabase.getInstance("https://proyectopropio-fd31a-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
@@ -89,7 +88,7 @@ public class HomeFragment extends Fragment {
             DatabaseReference incidencies = uid.child("incidencies");
 
             DatabaseReference reference = incidencies.push();
-            reference.setValue(incidencia);
+            reference.setValue(club);
         });
 
         foto = root.findViewById(R.id.foto);

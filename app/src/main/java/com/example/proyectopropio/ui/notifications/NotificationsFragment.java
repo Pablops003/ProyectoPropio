@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectopropio.R;
 import com.example.proyectopropio.databinding.FragmentNotificationsBinding;
-import com.example.proyectopropio.ui.Incidencia;
+import com.example.proyectopropio.ui.Club;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -88,13 +88,13 @@ public class NotificationsFragment extends Fragment {
                 }
 
                 // Obtener la incidencia y las coordenadas
-                Incidencia incidencia = snapshot.getValue(Incidencia.class);
+                Club club = snapshot.getValue(Club.class);
                 Double latitud = snapshot.child("latitud").getValue(Double.class);
                 Double longitud = snapshot.child("longitud").getValue(Double.class);
                 Log.d("O", latitud + " " + longitud);
 
                 // Verificar que la incidencia no es nula
-                if (incidencia != null) {
+                if (club != null) {
                     GeoPoint location = new GeoPoint(latitud, longitud);
 
                     // Calcular distancia y tiempo
@@ -104,7 +104,7 @@ public class NotificationsFragment extends Fragment {
                     // Crear y agregar el marcador
                     Marker marker = new Marker(binding.map);
                     marker.setPosition(location);
-                    marker.setTitle(incidencia.getProblema() + "\n" +
+                    marker.setTitle(club.getProblema() + "\n" +
                             String.format("%.2f", distancia) + " metros\n" +
                             String.format("%.2f", tiempoEstimado) + " minutos");
 
@@ -138,7 +138,7 @@ public class NotificationsFragment extends Fragment {
 
     // Método para calcular el tiempo de viaje
     private double calcularTiempo(double distancia) {
-        double velocidad = 50; // Velocidad en km/h
+        double velocidad = 7;// Velocidad en km/h
         double velocidadEnMetrosPorSegundo = velocidad * 1000 / 3600; // Convertimos km/h a m/s
 
         // Y los 3600 son los segundo que hay en una hora y mil son los metros que hay en un km
